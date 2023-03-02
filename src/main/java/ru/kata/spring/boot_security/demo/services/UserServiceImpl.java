@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.repositories.UserDao;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -15,31 +15,31 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService{
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserDao userDao, @Lazy PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User findUserById(long id) {
-        return userRepository.findUserById(id);
+        return userDao.findUserById(id);
     }
 
     @Override
     @Transactional
     public void create(User user) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.create(user);
+            userDao.create(user);
     }
 
     @Override
     public User findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userDao.findUserByUsername(username);
     }
 
     @Override
@@ -53,25 +53,26 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public List<User> findAllUsers() {
-        return userRepository.findAllUsers();
+        return userDao.findAllUsers();
     }
 
     @Override
     @Transactional
     public void update(long id, User user) {
         if (user.getPassword().isEmpty()) {
-            user.setPassword(userRepository.findUserByUsername(user.getUsername()).getPassword());
+            user.setPassword(userDao.findUserByUsername(user.getUsername()).getPassword());
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userRepository.update(id, user);
+        userDao.update(id, user);
     }
 
     @Override
     @Transactional
     public void delete(long id) {
-        if (userRepository.findUserById(id).getUsername() != null) {
-            userRepository.delete(id);
+        User user = userDao.findUserById(id);
+        if (user != null) {
+            userDao.delete(user);
         }
     }
 }

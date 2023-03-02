@@ -8,12 +8,12 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class RoleRepositoryImpl implements RoleRepository{
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public RoleRepositoryImpl(EntityManager entityManager) {
+    public RoleDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

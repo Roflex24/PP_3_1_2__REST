@@ -13,18 +13,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController {
+public class AdminRestController {
 
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<User> showAllUsers(){
         return userService.findAllUsers();
     }
@@ -34,7 +34,7 @@ public class AdminController {
         return userService.findUserById(id);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<User> showCreateUser(@RequestBody User user) {
         userService.create(user);
         return new ResponseEntity<>(HttpStatus.OK);

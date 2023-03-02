@@ -4,7 +4,7 @@ import ru.kata.spring.boot_security.demo.entity.User;
 
 import java.util.List;
 
-public interface UserRepository {
+public interface UserDao {
 
     User findUserById(long id);
 
@@ -14,8 +14,7 @@ public interface UserRepository {
 
     List<User> findAllUsers();
 
-    void delete(long id);
-
+    void delete(User user);
     void update(long id, User user);
 
 }
